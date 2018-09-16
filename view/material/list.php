@@ -1,5 +1,5 @@
 <?php view::layout('layout')?>
-<?php 
+<?php
 function file_ico($item){
   $ext = strtolower(pathinfo($item['name'], PATHINFO_EXTENSION));
   if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
@@ -16,7 +16,7 @@ function file_ico($item){
 ?>
 
 <?php view::begin('content');?>
-	
+
 <div class="mdui-container-fluid">
 
 <?php if($head):?>
@@ -25,14 +25,14 @@ function file_ico($item){
 </div>
 <?php endif;?>
 
-	
+
 <div class="mdui-row">
 	<ul class="mdui-list">
-		<li class="mdui-list-item th">
-		  <div class="mdui-col-xs-12 mdui-col-sm-7">文件 <i class="mdui-icon material-icons icon-sort" data-sort="name" data-order="downward">expand_more</i></div>
-		  <div class="mdui-col-sm-3 mdui-text-right">修改时间 <i class="mdui-icon material-icons icon-sort" data-sort="date" data-order="downward">expand_more</i></div>
-		  <div class="mdui-col-sm-2 mdui-text-right">大小 <i class="mdui-icon material-icons icon-sort" data-sort="size" data-order="downward">expand_more</i></div>
-		</li>
+        <li class="mdui-list-item th">
+            <div class="mdui-col-xs-4 mdui-col-sm-7 list-sort-title">文件名 <i class="mdui-icon material-icons icon-sort" data-sort="name" data-order="downward">arrow_downward</i></div>
+            <div class="mdui-col-xs-4 mdui-col-sm-3 mdui-text-right list-sort-title">修改时间 <i class="mdui-icon material-icons  icon-sort" data-sort="date" data-order="downward">arrow_downward</i></div>
+            <div class="mdui-col-xs-4 mdui-col-sm-2 mdui-text-right list-sort-title">大小 <i class="mdui-icon material-icons icon-sort" data-sort="size" data-order="downward">arrow_downward</i></div>
+        </li>
 		<?php if($path != '/'):?>
 		<li class="mdui-list-item mdui-ripple">
 			<a href="<?php echo get_absolute_path($root.$path.'../');?>">
@@ -48,8 +48,7 @@ function file_ico($item){
 
 		<?php foreach((array)$items as $item):?>
 			<?php if(!empty($item['folder'])):?>
-
-		<li class="mdui-list-item mdui-ripple" data-sort data-sort-name="<?php e($item['name']);?>" data-sort-date="<?php echo $item['lastModifiedDateTime'];?>" data-sort-size="<?php echo $item['size'];?>">
+                <li class="mdui-list-item mdui-ripple" folder-sort data-sort-name="<?php e($item['name']);?>" data-sort-date="<?php echo $item['lastModifiedDateTime'];?>" data-sort-size="<?php echo $item['size'];?>">
 			<a href="<?php echo get_absolute_path($root.$path.rawurlencode($item['name']));?>">
 			  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
 				<i class="mdui-icon material-icons">folder_open</i>
@@ -59,8 +58,20 @@ function file_ico($item){
 			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo onedrive::human_filesize($item['size']);?></div>
 		  	</a>
 		</li>
+            <?php elseif (file_ico($item)=="image"):?>
+                <li class="mdui-list-item file mdui-ripple mdui-col-sm-6 mdui-col-xs-6" data-sort data-sort-name="<?php e($item['name']);?>" data-sort-date="<?php echo $item['lastModifiedDateTime'];?>" data-sort-size="<?php echo $item['size'];?>">
+                    <a href="<?php echo get_absolute_path($root.$path).rawurlencode($item['name']);?>" target="_blank">
+                        <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-text-truncate">
+                            <i class="mdui-icon material-icons"><?php echo file_ico($item);?></i>
+                            <?php e($item['name']);?>
+                        </div>
+                        <div class="mdui-col-sm-4 mdui-text-right"><?php echo date("Y-m-d H:i:s", $item['lastModifiedDateTime']);?></div>
+                        <div class="mdui-col-sm-2 mdui-text-right"><?php echo onedrive::human_filesize($item['size']);?></div>
+                        <img class="mdui-img-fluid scrollLoading img-center" data-url="<?php echo get_absolute_path($root.$path).rawurlencode($item['name']);?>?t=400|400" alt="<?php e($item['name']);?>" src="/loading.gif">
+                    </a>
+                </li>
 			<?php else:?>
-		<li class="mdui-list-item file mdui-ripple" data-sort data-sort-name="<?php e($item['name']);?>" data-sort-date="<?php echo $item['lastModifiedDateTime'];?>" data-sort-size="<?php echo $item['size'];?>">
+                <li class="mdui-list-item file mdui-ripple" data-sort data-type="<?php file_ico($item)?>" data-sort-name="<?php e($item['name']);?>" data-sort-date="<?php echo $item['lastModifiedDateTime'];?>" data-sort-size="<?php echo $item['size'];?>">
 			<a href="<?php echo get_absolute_path($root.$path).rawurlencode($item['name']);?>" target="_blank">
 			  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
 				<i class="mdui-icon material-icons"><?php echo file_ico($item);?></i>
@@ -122,17 +133,29 @@ $(function () {
         });
     });
 
+    $('.list-sort-title').on('click', function () {
+        jQuery(this).children('i').trigger("click" );
+    });
+
     $('.icon-sort').on('click', function () {
         var sort_type = $(this).attr("data-sort"), sort_order = $(this).attr("data-order");
-        var sort_order_to = (sort_order === "less") ? "more" : "less";
+        var sort_order_to = (sort_order === "downward") ? "upward" : "downward";
+
 
         $('li[data-sort]').sortElements(function (a, b) {
             var data_a = $(a).attr("data-sort-" + sort_type), data_b = $(b).attr("data-sort-" + sort_type);
             var rt = data_a.localeCompare(data_b, undefined, {numeric: true});
-            return (sort_order === "more") ? 0-rt : rt;
+            return (sort_order === "downward") ? 0-rt : rt;
         });
 
-        $(this).attr("data-order", sort_order_to).text("expand_" + sort_order_to);
+        $(this).attr("data-order", sort_order_to).text("arrow_" + sort_order_to);
+        window.scrollBy(0,1);
+
+        $('li[folder-sort]').sortElements(function (a, b) {
+            var data_a = $(a).attr("data-sort-" + sort_type), data_b = $(b).attr("data-sort-" + sort_type);
+            var rt = data_a.localeCompare(data_b, undefined, {numeric: true});
+            return (sort_order === "downward") ? 0-rt : rt;
+        });
     })
 
 });
