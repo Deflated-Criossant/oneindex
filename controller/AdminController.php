@@ -19,6 +19,7 @@ class AdminController{
 	    'code'=>['html','htm','php', 'css', 'go','java','js','json','txt','sh','md'],
 	    'doc'=>['csv','doc','docx','odp','ods','odt','pot','potm','potx','pps','ppsx','ppsxm','ppt','pptm','pptx','rtf','xls','xlsx']
 	  ),
+	  'hide'=>[],
 	  'images'=>['home'=>false,'public'=>false, 'exts'=>['jpg','png','gif','bmp']]
 	);
 	
@@ -97,6 +98,10 @@ class AdminController{
 	function show(){
 		if(!empty($_POST) ){
 			foreach($_POST as $n=>$ext){
+                if ($n === 'hide') {
+                    config('hide', explode(' ', $ext));
+                    continue;
+                }
 				$show[$n] = explode(' ', $ext);
 			}
 			config('show', $show);
@@ -111,8 +116,9 @@ class AdminController{
 			'code'=>'文本/代码(code)',
 			'doc'=>'文档(doc)'
 		];
+		$hide = config('hide');
 		$show = config('show');
-		return view::load('show')->with('names', $names)->with('show', $show);
+		return view::load('show')->with('names', $names)->with('show', $show)->with('hide', $hide);
 	}
 
 	function setpass(){

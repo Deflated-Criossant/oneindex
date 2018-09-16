@@ -113,6 +113,14 @@ class IndexController{
 			//不在列表中展示
 			unset($this->items['HEAD.md']);
 		}
+
+		$hide = config('hide');
+        foreach($hide as $n=>$exts){
+            if($this->items[$exts]){
+                unset($this->items[$exts]);
+            }
+        }
+
 		return view::load('list')->with('title', 'index of '. urldecode($this->url_path))
 					->with('navs', $navs)
 					->with('path',join("/", array_map("rawurlencode", explode("/", $this->url_path)))  )

@@ -13,7 +13,10 @@
 			  <input class="mdui-textfield-input" type="text" name="<?php echo $n;?>" value="<?php echo join(' ', $ext);?>"/>
 			</div>
 		<?php endforeach;?>
-
+        <div class="mdui-textfield">
+            <h4>隐藏文件/文件夹(文件/文件夹名)  <small>所有同名文件和文件夹都会隐藏!!!</small></h4>
+            <input class="mdui-textfield-input" type="text" name="hide" value="<?php echo join(' ', $hide);?>"/>
+        </div>
 	   <button type="submit" class="mdui-btn mdui-color-theme-accent mdui-ripple mdui-float-right">
 	   	<i class="mdui-icon material-icons">&#xe161;</i> 保存
 	   </button>
