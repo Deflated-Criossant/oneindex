@@ -55,6 +55,11 @@ if( ($_COOKIE['admin'] == md5(config('password').config('refresh_token')) || $im
 	}
 }
 
+/**
+ * 　API  /api/path={file path}
+ */
+route::any('/api/#all','APIController@index');
+
 
 /**
  *    列目录
