@@ -14,6 +14,8 @@ Rearrange Material layout. Show sorting buttons on `xs` screen devices
 Hiding folders or files **ONLY BY NAME**. Which means hide all files and folders with same name even they are in different locations.
 
 Api /api/ page for avoiding cross domain issue when fetching file Demo: [https://drive.mihoyo.tech/api/path=static/amigo/updateInfo.json](https://drive.mihoyo.tech/api/path=static/amigo/updateInfo.json)  
+
+List files inside directory is request a path end with '/'
 ## 功能改变:
 
 Material主题添加缩略图加载, 小屏设备也显示排序按钮, 排序时始终保持文件夹在最前
@@ -22,9 +24,10 @@ Material主题添加缩略图加载, 小屏设备也显示排序按钮, 排序�
 
 添加api控制器避免cross domain问题以供前端获取文件 Demo: [https://drive.mihoyo.tech/api/path=static/amigo/updateInfo.json](https://drive.mihoyo.tech/api/path=static/amigo/updateInfo.json)  
 
+请求文件夹地址则返回文件列表
 ## Change Log:
 
-18-09-19: Add api controller for fetching file to avoid CROSS issue.
+18-09-19: Add api controller for fetching file to avoid CORS issue. List files inside directory
 
 18-09-17: Hide folders/files by name only
 
