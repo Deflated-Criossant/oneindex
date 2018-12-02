@@ -24,6 +24,8 @@
 <script>
 const ap = new APlayer({
     container: document.getElementById('aplayer'),
+    autoplay: true,
+    loop: 'one',
     audio: [{
         name: '<?php e(pathinfo($item["name"], PATHINFO_FILENAME)); ?>',
         artist: 'Oneindex Preview',
