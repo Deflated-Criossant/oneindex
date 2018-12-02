@@ -73,7 +73,7 @@ class IndexController{
 			$url = $_SERVER['REQUEST_URI'].'/';
 		}elseif(!is_null($_GET['t']) ){//缩略图
 			$url = $this->thumbnail($item);
-		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) ){
+		}elseif($_SERVER['REQUEST_METHOD'] == 'POST' || !is_null($_GET['s']) || strpos($_SERVER['REQUEST_URI'],'?preview=true') ){
 			return $this->show($item);
 		}else{//返回下载链接
 			$url = $item['downloadUrl'];
