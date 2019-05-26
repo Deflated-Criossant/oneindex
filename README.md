@@ -3,6 +3,12 @@ Onedrive Directory Index
 
 Forked from [https://github.com/donwa/oneindex](https://github.com/donwa/oneindex)
 
+# 已转战PyOne 停止更新本项目
+# [PyOne_mod项目地址](https://github.com/yyuueexxiinngg/PyOne_mod)
+
+
+# Archive:
+
 ## What's Changed:
 
 Add image thumbnail for Material layout
